@@ -27,8 +27,11 @@ class SSD(nn.Module):
         self.config = config
 
         # register layers in source_layer_indexes by adding them to a module list
-        self.source_layer_add_ons = nn.ModuleList([t[1] for t in source_layer_indexes
-                                                   if isinstance(t, tuple) and not isinstance(t, GraphPath)])
+        self.source_layer_add_ons = nn.ModuleList([
+            t[1] for t in source_layer_indexes
+            if isinstance(t, tuple) and not isinstance(t, GraphPath)
+        ])
+
         if device:
             self.device = device
         else:

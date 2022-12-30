@@ -110,10 +110,14 @@ def convert_boxes_to_locations(center_form_boxes, center_form_priors, center_var
     # priors can have one dimension less
     if center_form_priors.dim() + 1 == center_form_boxes.dim():
         center_form_priors = center_form_priors.unsqueeze(0)
-    return torch.cat([
-        (center_form_boxes[..., :2] - center_form_priors[..., :2]) / center_form_priors[..., 2:] / center_variance,
-        torch.log(center_form_boxes[..., 2:] / center_form_priors[..., 2:]) / size_variance
-    ], dim=center_form_boxes.dim() - 1)
+
+    return torch.cat(
+        [
+            (center_form_boxes[..., :2] - center_form_priors[..., :2]) / center_form_priors[..., 2:] / center_variance,
+            torch.log(center_form_boxes[..., 2:] / center_form_priors[..., 2:]) / size_variance,
+        ],
+        dim=center_form_boxes.dim() - 1,
+    )
 
 
 def area_of(left_top, right_bottom) -> torch.Tensor:
@@ -184,9 +188,9 @@ def hard_negative_mining(loss, labels, neg_pos_ratio):
     It used to suppress the presence of a large number of negative prediction.
     It works on image level not batch level.
     For any example/image, it keeps all the positive predictions and
-     cut the number of negative predictions to make sure the ratio
-     between the negative examples and positive examples is no more
-     the given ratio for an image.
+    cut the number of negative predictions to make sure the ratio
+    between the negative examples and positive examples is no more
+    the given ratio for an image.
 
     Args:
         loss (N, num_priors): the loss for each example.
