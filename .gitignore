@@ -2,7 +2,7 @@
 .idea
 log
 models
-
+/data/VOCdevkit
 eval_results/
 
 # Pytorch Models
